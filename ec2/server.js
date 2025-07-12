@@ -22,7 +22,7 @@ app.use((req, res, next) => {
 });
 
 // Middleware
-app.use(express.json({ limit: '50mb' }));
+app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Store running projects
@@ -102,63 +102,6 @@ function validateProjectData(data) {
     
     return errors;
 }
-
-// Helper: Parse LLM output for <file> and remove() tags
-function parseCodegenOutput(llmOutput) {
-  const fileRegex = /<file>\s*<path>(.*?)<\/path>\s*([\s\S]*?)<\/file>/g;
-  const removeRegex = /remove\((.*?)\)/g;
-  const changes = [];
-
-  let match;
-  while ((match = fileRegex.exec(llmOutput)) !== null) {
-    changes.push({ type: 'file', path: match[1].trim(), content: match[2].trim() });
-  }
-  while ((match = removeRegex.exec(llmOutput)) !== null) {
-    changes.push({ type: 'remove', path: match[1].trim() });
-  }
-  return changes;
-}
-
-// POST /apply-codegen
-app.post('/apply-codegen', async (req, res) => {
-  try {
-    const { repoId, codegen } = req.body;
-    if (!repoId || !codegen) {
-      return res.status(400).json({ error: 'Missing repoId or codegen' });
-    }
-
-    const repoDir = path.join('/home/ubuntu/athena-projects', repoId); // adjust as needed
-
-    const changes = parseCodegenOutput(codegen);
-
-    for (const change of changes) {
-      const filePath = path.join(repoDir, change.path);
-      if (change.type === 'file') {
-        fs.mkdirSync(path.dirname(filePath), { recursive: true });
-        fs.writeFileSync(filePath, change.content, 'utf-8');
-      } else if (change.type === 'remove') {
-        if (fs.existsSync(filePath)) {
-          fs.unlinkSync(filePath);
-        }
-      }
-    }
-
-    const { exec } = require('child_process');
-    exec(
-      `cd ${repoDir} && git add . && git commit -m "change request" && git push origin main`,
-      (err, stdout, stderr) => {
-        if (err) {
-          console.error('Git error:', stderr);
-          return res.status(500).json({ error: 'Git commit/push failed', details: stderr });
-        }
-        res.json({ success: true, message: 'Codegen applied and committed', changes: changes.length });
-      }
-    );
-  } catch (error) {
-    console.error('Apply codegen error:', error);
-    res.status(500).json({ error: error.message || String(error) });
-  }
-});
 
 // Health check endpoint
 app.get('/health', (req, res) => {

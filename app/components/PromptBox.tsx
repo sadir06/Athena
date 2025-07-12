@@ -97,31 +97,31 @@ export default function PromptBox({ onSubmit, onGoToProject, isCheckingProject }
 
         <div className="flex flex-wrap items-center p-4 border-t border-yellow-400/20 bg-gray-800/40 backdrop-blur-sm gap-4 md:gap-8 justify-between"> {/* More gap and justify-between for button separation */}
           <div className="flex items-center gap-4 md:gap-6 flex-1">
-          <motion.button
-            type="button"
-            onClick={handleGenerateIdea}
-            disabled={isGeneratingIdea}
-            className="relative text-gray-300 hover:text-white px-4 py-2 rounded-xl font-medium transition-all duration-300 flex items-center gap-2 backdrop-blur-sm border border-yellow-400/10 hover:border-transparent overflow-hidden group"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            {/* Rainbow glow background */}
-            <div className="absolute inset-0 bg-gradient-to-r from-red-500 via-yellow-500 via-green-500 via-blue-500 via-purple-500 to-pink-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300 group-hover:animate-pulse"></div>
-            <div className="absolute inset-0 bg-gradient-to-r from-red-500 via-yellow-500 via-green-500 via-blue-500 via-purple-500 to-pink-500 opacity-0 group-hover:opacity-20 transition-opacity duration-300 blur-sm"></div>
-            <div className="relative z-10 flex items-center gap-2">
-            {isGeneratingIdea ? (
-              <>
-                <div className="animate-spin rounded-full h-4 w-4 border-2 border-t-transparent border-yellow-400" />
-                <span>Thinking...</span>
-              </>
-            ) : (
-              <>
-                <FaLightbulb className="size-4" />
-                <span>Random Idea</span>
-              </>
-            )}
-            </div>
-          </motion.button>
+            <motion.button
+              type="button"
+              onClick={handleGenerateIdea}
+              disabled={isGeneratingIdea}
+              className="relative text-gray-300 hover:text-white px-4 py-2 rounded-xl font-medium transition-all duration-300 flex items-center gap-2 backdrop-blur-sm border border-yellow-400/10 hover:border-transparent overflow-hidden group"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              {/* Rainbow glow background */}
+              <div className="absolute inset-0 bg-gradient-to-r from-red-500 via-yellow-500 via-green-500 via-blue-500 via-purple-500 to-pink-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300 group-hover:animate-pulse"></div>
+              <div className="absolute inset-0 bg-gradient-to-r from-red-500 via-yellow-500 via-green-500 via-blue-500 via-purple-500 to-pink-500 opacity-0 group-hover:opacity-20 transition-opacity duration-300 blur-sm"></div>
+              <div className="relative z-10 flex items-center gap-2">
+              {isGeneratingIdea ? (
+                <>
+                  <div className="animate-spin rounded-full h-4 w-4 border-2 border-t-transparent border-yellow-400" />
+                  <span>Thinking...</span>
+                </>
+              ) : (
+                <>
+                  <FaLightbulb className="size-4" />
+                  <span>Random Idea</span>
+                </>
+              )}
+              </div>
+            </motion.button>
           </div>
 
           <div className="flex items-center gap-4 md:gap-6 flex-shrink-0">

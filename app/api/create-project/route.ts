@@ -183,8 +183,8 @@ export async function POST(request: Request) {
             while (attempt < maxRetries && !success) {
                 attempt++;
                 try {
-                await new Promise(resolve => setTimeout(resolve, 5000));
-                
+                    await new Promise(resolve => setTimeout(resolve, 5000));
+
                     const payload = {
                         repoId: projectId,
                         changeRequest: `Create the initial project based on this overview: ${body.projectoverview}`,
@@ -234,7 +234,7 @@ export async function POST(request: Request) {
                         changes: changes
                     }));
                     success = true;
-            } catch (err) {
+                } catch (err) {
                     console.log(`[CHANGE-REQUEST] Attempt ${attempt} - Exception:`, err);
                     lastError = err instanceof Error ? err.message : String(err);
                 }
