@@ -38,15 +38,18 @@ async function fetchAllFilesFromGitHub(repoUrl: string, githubToken: string): Pr
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const githubRepoUrl = typeof body === 'object' && body && 'githubRepoUrl' in body ? body.githubRepoUrl : '';
-    const changeRequest = typeof body === 'object' && body && 'changeRequest' in body ? body.changeRequest : '';
-    const githubToken = process.env.GITHUB_SERVICE_ACCOUNT_PAT || (process.env.GITHUB_SERVICE_ACCOUNT_PAT as string);
+    const githubRepoUrl = typeof body === 'object' && body && 'githubRepoUrl' in body && typeof body.githubRepoUrl === 'string'
+      ? body.githubRepoUrl
+      : '';
+    const changeRequest = typeof body === 'object' && body && 'changeRequest' in body && typeof body.changeRequest === 'string'
+      ? body.changeRequest
+      : '';
+    const githubToken = process.env.GITHUB_SERVICE_ACCOUNT_PAT || '';
     if (!githubToken) throw new Error('Missing GitHub token');
-    const files = await fetchAllFilesFromGitHub(githubRepoUrl, githubToken);
+    const files = await fetchAllFilesFromGitHub(String(githubRepoUrl), githubToken);
     const context = files.map(f => `File: ${f.path}\n${f.content}`).join('\n---\n');
     const prompt = `${SYSTEM_PROMPT}\n\nGitHub Files:\n${context}\n\nUser Change Request:\n${changeRequest}`;
-    // Call Gemini 2.0 Flash (or Claude)
-    const genAI = new GoogleGenerativeAI(process.env.GOOGLE_GEMINI_API_KEY || process.env.GOOGLE_GEMINI_API_KEY);
+    const genAI = new GoogleGenerativeAI(process.env.GOOGLE_GEMINI_API_KEY || '');
     const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
     const result = await model.generateContent(prompt);
     const text = result.response.candidates?.[0]?.content?.parts?.[0]?.text || result.response.text || '';
@@ -59,6 +62,7 @@ export async function POST(request: Request) {
     }
     return new Response(JSON.stringify({ overview }), { headers: { 'Content-Type': 'application/json' } });
   } catch (error) {
-    return new Response(JSON.stringify({ error: error instanceof Error ? error.message : String(error) }), { status: 500, headers: { 'Content-Type': 'application/json' } });
+    console.error('Error in change request overview API:', error);
+    return new Response('Internal Server Error', { status: 500 });
   }
-} 
+}
