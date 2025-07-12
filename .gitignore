@@ -43,7 +43,6 @@ next-env.d.ts
 # wrangler files
 .wrangler
 .dev.vars*
-wrangler.jsonc
 
 DISCARD
 todo.txt

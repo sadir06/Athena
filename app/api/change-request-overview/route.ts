@@ -27,10 +27,10 @@ async function fetchAllFilesFromGitHub(repoUrl: string, githubToken: string): Pr
       headers: { 'Authorization': `token ${githubToken}` }
     });
     if (!fileRes.ok) return null;
-    const fileData = await fileRes.json();
-    if (!fileData || typeof fileData !== 'object' || typeof (fileData as any).content !== 'string') return null;
-    const contentBase64 = (fileData as any).content;
-    const content = contentBase64 ? BufferPolyfill.from(String(contentBase64), 'base64').toString('utf-8') : '';
+    const fileData: any = await fileRes.json();
+    if (!fileData || typeof fileData !== 'object' || typeof fileData.content !== 'string') return null;
+    const contentBase64: string = fileData.content;
+    const content = BufferPolyfill.from(contentBase64, 'base64').toString('utf-8');
     return { path: file.path, content };
   }));
   return fileContents.filter(Boolean) as {path: string, content: string}[];
