@@ -39,8 +39,8 @@ export async function POST(request: NextRequest) {
       const genAI = new GoogleGenerativeAI(geminiApiKey);
       const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
       const result = await model.generateContent(finalPrompt);
-      codegenContent = result.response.candidates?.[0]?.content?.parts?.[0]?.text || result.response.text || '';
-      if (typeof codegenContent !== 'string') codegenContent = '';
+      let geminiText = result.response.candidates?.[0]?.content?.parts?.[0]?.text || result.response.text || '';
+      codegenContent = typeof geminiText === 'string' ? geminiText : '';
     } else {
       codegenContent = '// No LLM API key configured. Please set GROQ_API_KEY or GOOGLE_GEMINI_API_KEY.';
     }
