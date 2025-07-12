@@ -1,5 +1,3 @@
-import { getRequestContext } from '@cloudflare/next-on-pages';
-
 export const runtime = 'edge';
 
 interface DeleteProjectRequest {
@@ -25,9 +23,8 @@ export async function POST(request: Request) {
         console.log('🎯 Deleting project:', projectId);
 
         // Get environment variables
-        const { env } = getRequestContext();
-        const githubToken = (env as any).GITHUB_SERVICE_ACCOUNT_PAT as string;
-        const kvStore = env.ATHENA_AI_PROJECTS;
+        const githubToken = process.env.GITHUB_SERVICE_ACCOUNT_PAT as string;
+        const kvStore = process.env.ATHENA_AI_PROJECTS;
 
         if (!githubToken) {
             return new Response(JSON.stringify({

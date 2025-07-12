@@ -1,4 +1,3 @@
-import { getRequestContext } from '@cloudflare/next-on-pages';
 import { Groq } from 'groq-sdk';
 
 export const runtime = 'edge';
@@ -43,7 +42,7 @@ export async function GET() {
         console.log("🌱 Generated random seed for Athena:", randomSeed);
 
         // Get environment variables
-        const { env } = getRequestContext();
+        const { env } = process.env;
         console.log("🔑 Environment context retrieved");
         
         // Check if API key exists

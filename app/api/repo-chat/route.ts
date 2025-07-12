@@ -1,5 +1,4 @@
 import Groq from 'groq-sdk';
-import { getRequestContext } from '@cloudflare/next-on-pages';
 
 interface RepoChatRequest {
     message: string;
@@ -18,10 +17,9 @@ export const runtime = 'edge';
 
 export async function POST(request: Request) {
     console.log("💬 Repository Chat API activated - let's have a codebase conversation!");
-    const { env } = getRequestContext();
     
     const groq = new Groq({
-        apiKey: env.GROQ_API_KEY
+        apiKey: process.env.GROQ_API_KEY
     });
 
     try {

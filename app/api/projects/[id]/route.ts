@@ -1,5 +1,3 @@
-import { getRequestContext } from '@cloudflare/next-on-pages';
-
 export const runtime = 'edge';
 
 interface RouteParams {
@@ -24,8 +22,7 @@ export async function GET(request: Request, { params }: RouteParams) {
         }
 
         // Get KV binding
-        const { env } = getRequestContext();
-        const kvStore = env.ATHENA_AI_PROJECTS;
+        const kvStore = process.env.ATHENA_AI_PROJECTS;
 
         console.log("💾 Retrieving project data from KV store...");
         const projectDataJson = await kvStore.get(projectId);
@@ -91,8 +88,7 @@ export async function DELETE(request: Request, { params }: RouteParams) {
         }
 
         // Get KV binding
-        const { env } = getRequestContext();
-        const kvStore = env.ATHENA_AI_PROJECTS;
+        const kvStore = process.env.ATHENA_AI_PROJECTS;
 
         console.log("💾 Deleting project data from KV store...");
         await kvStore.delete(projectId);

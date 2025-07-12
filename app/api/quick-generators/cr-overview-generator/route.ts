@@ -1,4 +1,3 @@
-import { getRequestContext } from '@cloudflare/next-on-pages';
 import { Groq } from 'groq-sdk';
 import type { ChatCompletionMessageParam } from 'groq-sdk/resources/chat/completions';
 
@@ -25,8 +24,7 @@ export async function POST(request: Request) {
     const body = (await request.json()) as { projectData: string; changeRequest: string; history?: { role: string; content: string }[] };
     console.log('[DEBUG] Incoming request body:', body);
     const { projectData, changeRequest, history } = body;
-    const { env } = getRequestContext();
-    const apiKey = (env as any).GROQ_API_KEY as string;
+    const apiKey = process.env.GROQ_API_KEY as string;
     console.log('[DEBUG] GROQ_API_KEY present:', !!apiKey);
     if (!apiKey) throw new Error('Missing GROQ API key');
 

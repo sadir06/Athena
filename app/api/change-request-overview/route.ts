@@ -1,5 +1,4 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
-import { getRequestContext } from '@cloudflare/next-on-pages';
 
 export const runtime = 'edge';
 
@@ -41,13 +40,13 @@ export async function POST(request: Request) {
     const body = await request.json();
     const githubRepoUrl = typeof body === 'object' && body && 'githubRepoUrl' in body ? body.githubRepoUrl : '';
     const changeRequest = typeof body === 'object' && body && 'changeRequest' in body ? body.changeRequest : '';
-    const githubToken = process.env.GITHUB_SERVICE_ACCOUNT_PAT || (getRequestContext().env.GITHUB_SERVICE_ACCOUNT_PAT as string);
+    const githubToken = process.env.GITHUB_SERVICE_ACCOUNT_PAT || (process.env.GITHUB_SERVICE_ACCOUNT_PAT as string);
     if (!githubToken) throw new Error('Missing GitHub token');
     const files = await fetchAllFilesFromGitHub(githubRepoUrl, githubToken);
     const context = files.map(f => `File: ${f.path}\n${f.content}`).join('\n---\n');
     const prompt = `${SYSTEM_PROMPT}\n\nGitHub Files:\n${context}\n\nUser Change Request:\n${changeRequest}`;
     // Call Gemini 2.0 Flash (or Claude)
-    const genAI = new GoogleGenerativeAI(process.env.GOOGLE_GEMINI_API_KEY || getRequestContext().env.GOOGLE_GEMINI_API_KEY);
+    const genAI = new GoogleGenerativeAI(process.env.GOOGLE_GEMINI_API_KEY || process.env.GOOGLE_GEMINI_API_KEY);
     const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
     const result = await model.generateContent(prompt);
     const text = result.response.candidates?.[0]?.content?.parts?.[0]?.text || result.response.text || '';

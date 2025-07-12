@@ -1,5 +1,3 @@
-import { getRequestContext } from '@cloudflare/next-on-pages';
-
 interface CreateProjectRequest {
     projectoverview: string;
     stack?: string;
@@ -112,8 +110,8 @@ export async function POST(request: Request) {
         }
 
         // Get KV binding
-        const { env } = getRequestContext();
-        const kvStore = env.ATHENA_AI_PROJECTS;
+        // const { env } = getRequestContext();
+        // const kvStore = env.ATHENA_AI_PROJECTS;
 
         // Create KV entry with selected port
         const projectData = {
@@ -129,7 +127,7 @@ export async function POST(request: Request) {
         };
 
         console.log("💾 Storing project data in KV store with port:", availablePort);
-        await kvStore.put(projectId, JSON.stringify(projectData));
+        // await kvStore.put(projectId, JSON.stringify(projectData));
 
         console.log("🎯 Forwarding project creation to EC2 instance - the magic begins! ✨");
         
@@ -154,11 +152,11 @@ export async function POST(request: Request) {
             console.error("❌ EC2 instance responded with error:", errorText);
             
             // Update KV with error status
-            await kvStore.put(projectId, JSON.stringify({
-                ...projectData,
-                status: 'error',
-                error: errorText
-            }));
+            // await kvStore.put(projectId, JSON.stringify({
+            //     ...projectData,
+            //     status: 'error',
+            //     error: errorText
+            // }));
             
             throw new Error(`EC2 instance error: ${ec2Response.status} - ${errorText}`);
         }
@@ -167,11 +165,11 @@ export async function POST(request: Request) {
         console.log("🎉 Project creation successful! Athena approves this strategic move! 🏛️");
 
         // Update KV with success status
-        await kvStore.put(projectId, JSON.stringify({
-            ...projectData,
-            status: 'created',
-            ec2Response: ec2ResponseData
-        }));
+        // await kvStore.put(projectId, JSON.stringify({
+        //     ...projectData,
+        //     status: 'created',
+        //     ec2Response: ec2ResponseData
+        // }));
 
         // --- AUTOMATION: Apply project overview as initial change request ---
         (async () => {
@@ -227,12 +225,12 @@ export async function POST(request: Request) {
 
                     const changes = typeof responseBody === 'object' && responseBody && 'changes' in responseBody ? responseBody.changes : [];
                     console.log(`[CHANGE-REQUEST] Attempt ${attempt} - Codegen+commit succeeded! Modified files:`, Array.isArray(changes) ? changes.length : 0);
-                    await kvStore.put(projectId, JSON.stringify({
-                        ...projectData,
-                        status: 'ready',
-                        lastChange: Date.now(),
-                        changes: changes
-                    }));
+                    // await kvStore.put(projectId, JSON.stringify({
+                    //     ...projectData,
+                    //     status: 'ready',
+                    //     lastChange: Date.now(),
+                    //     changes: changes
+                    // }));
                     success = true;
                 } catch (err) {
                     console.log(`[CHANGE-REQUEST] Attempt ${attempt} - Exception:`, err);
@@ -241,11 +239,11 @@ export async function POST(request: Request) {
             }
             if (!success) {
                 console.log(`[CHANGE-REQUEST] All attempts failed for projectId: ${projectId}. Last error:`, lastError);
-                await kvStore.put(projectId, JSON.stringify({
-                    ...projectData,
-                    status: 'error',
-                    error: lastError || 'Change request failed after retries'
-                }));
+                // await kvStore.put(projectId, JSON.stringify({
+                //     ...projectData,
+                //     status: 'error',
+                //     error: lastError || 'Change request failed after retries'
+                // }));
             } else {
                 console.log(`[CHANGE-REQUEST] ProjectId ${projectId} is now ready after codegen+commit automation.`);
             }

@@ -1,4 +1,3 @@
-import { getRequestContext } from '@cloudflare/next-on-pages';
 import { Groq } from 'groq-sdk';
 import type { ChatCompletionMessageParam } from 'groq-sdk/resources/chat/completions';
 import { applyChangesToRepo, FileChange } from '@/lib/githubApplyChange';
@@ -99,9 +98,8 @@ export async function POST(request: Request) {
     console.log('[DEBUG] [UpdateProject] Incoming payload:', body);
     const { repoId, changeRequest, projectContext = '' } = body;
     
-    const { env } = getRequestContext();
-    const apiKey = (env as any).GROQ_API_KEY as string;
-    const githubToken = (env as any).GITHUB_SERVICE_ACCOUNT_PAT as string;
+    const apiKey = process.env.GROQ_API_KEY as string;
+    const githubToken = process.env.GITHUB_SERVICE_ACCOUNT_PAT as string;
     
     if (!apiKey) throw new Error('Missing GROQ_API_KEY');
     if (!githubToken) throw new Error('Missing GITHUB_SERVICE_ACCOUNT_PAT');

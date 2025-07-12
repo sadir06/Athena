@@ -1,5 +1,4 @@
 import Groq from 'groq-sdk';
-import { getRequestContext } from '@cloudflare/next-on-pages';
 import { Octokit } from '@octokit/rest';
 
 interface RepositoryAnalysisRequest {
@@ -37,14 +36,13 @@ export const runtime = 'edge';
 
 export async function POST(request: Request) {
     console.log("🔍 Repository Analysis API activated - time to decode this codebase!");
-    const { env } = getRequestContext();
     
     const groq = new Groq({
-        apiKey: env.GROQ_API_KEY
+        apiKey: process.env.GROQ_API_KEY
     });
 
     const octokit = new Octokit({
-        auth: env.GITHUB_SERVICE_ACCOUNT_PAT
+        auth: process.env.GITHUB_SERVICE_ACCOUNT_PAT
     });
 
     try {

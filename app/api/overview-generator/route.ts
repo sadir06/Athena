@@ -1,4 +1,3 @@
-import { getRequestContext } from '@cloudflare/next-on-pages';
 import { Groq } from 'groq-sdk';
 import type { ChatCompletionMessageParam } from 'groq-sdk/resources/chat/completions';
 import { OVERVIEW_SYSTEM_PROMPT, OVERVIEW_TRAINING_HISTORY } from '@/lib/prompt';
@@ -24,7 +23,7 @@ export async function POST(request: Request) {
         console.log("📚 Received history length:", history.length);
 
         // Get environment variables
-        const { env } = getRequestContext();
+        const { env } = process.env;
         
         if (!env.GROQ_API_KEY) {
             console.error("❌ GROQ_API_KEY not found in environment");
