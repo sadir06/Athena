@@ -1,0 +1,67 @@
+/**
+ * For more details on how to configure Wrangler, refer to:
+ * https://developers.cloudflare.com/workers/wrangler/configuration/
+ */
+{
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "athena-hack",
+	"compatibility_date": "2025-07-05",
+	"compatibility_flags": [
+		"nodejs_compat"
+	],
+	"vars": {
+		// "GROQ_API_KEY": "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", // matthewgordon64@gmail.com athena-ai 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
+		"GROQ_API_KEY": "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", // matthewgordon64@gmail.com athena-2 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
+		"GOOGLE_GEMINI_API_KEY": "AIzaSyBna4JQkWNCRPGOYBhHCQXx0paW9ijUBYU", // m64 gmail
+		"ANTHROPIC_API_KEY": "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", // personal anthropic old project
+		"GITHUB_SERVICE_ACCOUNT_PAT": "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" // Athena AI Service Account PAT
+	},
+	"kv_namespaces": [
+		{
+			"binding": "ATHENA_AI_PROJECTS",
+			"id": "dca23ce88b454d7bb25e75bed95bb9cb"
+		},
+		{
+			"binding": "ATHENA_AI_HISTORIES",
+			"id": "284b4d2988bd4463861bf9f3dd567627"
+		}
+	],
+	"pages_build_output_dir": ".vercel/output/static",
+	"observability": {
+		"enabled": true
+	}
+	/**
+	 * Smart Placement
+	 * Docs: https://developers.cloudflare.com/workers/configuration/smart-placement/#smart-placement
+	 */
+	// "placement": { "mode": "smart" },
+
+	/**
+	 * Bindings
+	 * Bindings allow your Worker to interact with resources on the Cloudflare Developer Platform, including
+	 * databases, object storage, AI inference, real-time communication and more.
+	 * https://developers.cloudflare.com/workers/runtime-apis/bindings/
+	 */
+
+	/**
+	 * Environment Variables
+	 * https://developers.cloudflare.com/workers/wrangler/configuration/#environment-variables
+	 */
+	// "vars": { "MY_VARIABLE": "production_value" },
+	/**
+	 * Note: Use secrets to store sensitive data.
+	 * https://developers.cloudflare.com/workers/configuration/secrets/
+	 */
+
+	/**
+	 * Static Assets
+	 * https://developers.cloudflare.com/workers/static-assets/binding/
+	 */
+	// "assets": { "directory": "./public/", "binding": "ASSETS" },
+
+	/**
+	 * Service Bindings (communicate between multiple Workers)
+	 * https://developers.cloudflare.com/workers/wrangler/configuration/#service-bindings
+	 */
+	// "services": [{ "binding": "MY_SERVICE", "service": "my-service" }]
+}

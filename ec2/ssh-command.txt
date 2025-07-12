@@ -1,0 +1,1 @@
+ssh -i "athena-hack-ec2-key.pem" ubuntu@ec2-54-145-223-187.compute-1.amazonaws.com # 54.145.223.187

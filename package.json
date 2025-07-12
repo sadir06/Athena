@@ -1,0 +1,48 @@
+{
+	"name": "athena-hack",
+	"version": "0.1.0",
+	"private": true,
+	"scripts": {
+		"cycle": "git add . ; git commit -m 'cycle' ; git push origin main ; git checkout preview ; git merge main ; git push origin preview ; git checkout main",
+		"cycle2": "git checkout prod ; git merge preview ; git push origin prod ; git checkout main",
+		"dev": "next dev --turbopack",
+		"build": "next build",
+		"start": "next start",
+		"lint": "next lint",
+		"pages:build": "npx @cloudflare/next-on-pages",
+		"preview": "npm run pages:build && wrangler pages dev",
+		"deploy": "npm run pages:build && wrangler pages deploy",
+		"cf-typegen": "wrangler types --env-interface CloudflareEnv ./env.d.ts"
+	},
+	"dependencies": {
+		"@auth/core": "^0.34.2",
+		"@google/generative-ai": "^0.24.1",
+		"@octokit/rest": "^22.0.0",
+		"@radix-ui/react-slot": "^1.2.3",
+		"class-variance-authority": "^0.7.1",
+		"clsx": "^2.1.1",
+		"framer-motion": "^12.23.0",
+		"fs": "^0.0.1-security",
+		"groq-sdk": "^0.26.0",
+		"jszip": "^3.10.1",
+		"lucide-react": "^0.525.0",
+		"next": "15.3.4",
+		"react": "^19.0.0",
+		"react-dom": "^19.0.0",
+		"react-hot-toast": "^2.5.2",
+		"react-icons": "^5.5.0",
+		"react-markdown": "^10.1.0",
+		"tailwind-merge": "^3.3.1"
+	},
+	"devDependencies": {
+		"@cloudflare/next-on-pages": "^1.13.12",
+		"@tailwindcss/postcss": "^4",
+		"@types/node": "^20.19.4",
+		"@types/react": "^19",
+		"@types/react-dom": "^19",
+		"tailwindcss": "^4",
+		"typescript": "^5",
+		"vercel": "^44.2.12",
+		"wrangler": "^4.23.0"
+	}
+}
