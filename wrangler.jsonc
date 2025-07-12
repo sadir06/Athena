@@ -10,11 +10,12 @@
 		"nodejs_compat"
 	],
 	"vars": {
-		"GROQ_API_KEY": "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", // matthewgordon64@gmail.com athena-ai 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
-		"GOOGLE_GEMINI_API_KEY": "AIzaSyBna4JQkWNCRPGOYBhHCQXx0paW9ijUBYU", // m64 gmail
-		"ANTHROPIC_API_KEY": "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", // personal anthropic old project
-		"GITHUB_SERVICE_ACCOUNT_PAT": "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" // Athena AI Service Account PAT
+		"GROQ_API_KEY": "",
+		"GOOGLE_GEMINI_API_KEY": "",
+		"ANTHROPIC_API_KEY": "",
+		"GITHUB_SERVICE_ACCOUNT_PAT": ""
 	},
+	// NOTE: Set actual secret values using environment variables or in the Cloudflare dashboard. Do NOT store secrets in this file.
 	"kv_namespaces": [
 		{
 			"binding": "ATHENA_AI_PROJECTS",
